@@ -2,8 +2,8 @@ import type { Cookies } from '@sveltejs/kit';
 
 // Demo users for testing - replace with real database in production
 const DEMO_USERS = [
-    { id: '1', username: 'admin', password: 'admin123', role: 'admin' as const },
-    { id: '2', username: 'user', password: 'user123', role: 'user' as const }
+    { id: '1', username: 'admin@example.com', password: 'admin123', role: 'admin' as const },
+    { id: '2', username: 'user@example.com', password: 'user123', role: 'user' as const }
 ];
 
 const SESSION_COOKIE_NAME = 'session';

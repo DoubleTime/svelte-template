@@ -15,8 +15,8 @@
 	class="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-base-100 to-secondary/5 p-4"
 >
 	<div class="card w-full max-w-md bg-base-100 shadow-xl">
-		<div class="card-body">
-			<div class="text-center mb-6">
+		<div class="card-body p-8 sm:p-10">
+			<div class="text-center mb-8">
 				<h1 class="text-3xl font-bold">Login</h1>
 				<p class="text-base-content/60 mt-2">
 					Seamless Access, Secure Connection: Your Gateway<br />to a Personalized Experience.
@@ -38,7 +38,7 @@
 						await update();
 					};
 				}}
-				class="space-y-4"
+				class="space-y-5"
 			>
 				<div class="form-control">
 					<label class="label" for="username">
@@ -141,9 +141,9 @@
 							{/if}
 						</button>
 					</label>
-					<label class="label justify-end">
-						<a href="#" class="label-text-alt link link-primary">Forgot Password?</a>
-					</label>
+					<div class="text-right mt-2">
+						<a href="#" class="text-sm link link-primary">Forgot Password?</a>
+					</div>
 				</div>
 
 				<button type="submit" class="btn btn-primary w-full" disabled={loading}>

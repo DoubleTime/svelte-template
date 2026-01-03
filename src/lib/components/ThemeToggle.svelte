@@ -1,36 +1,143 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 
-	let isDark = $state(false);
+	const themes = [
+		// Light themes
+		'light',
+		'cupcake',
+		'bumblebee',
+		'emerald',
+		'corporate',
+		'retro',
+		'cyberpunk',
+		'valentine',
+		'garden',
+		'lofi',
+		'pastel',
+		'fantasy',
+		'wireframe',
+		'cmyk',
+		'autumn',
+		'acid',
+		'lemonade',
+		'winter',
+		'nord',
+		// Dark themes
+		'dark',
+		'synthwave',
+		'halloween',
+		'forest',
+		'aqua',
+		'black',
+		'luxury',
+		'dracula',
+		'business',
+		'night',
+		'coffee',
+		'dim',
+		'sunset'
+	];
+
+	let currentTheme = $state('light');
+	let isOpen = $state(false);
 
 	$effect(() => {
 		if (browser) {
-			isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+			const savedTheme = localStorage.getItem('theme') || 'light';
+			currentTheme = savedTheme;
+			document.documentElement.setAttribute('data-theme', savedTheme);
 		}
 	});
 
-	function toggleTheme() {
-		isDark = !isDark;
-		const theme = isDark ? 'dark' : 'light';
+	function selectTheme(theme: string) {
+		currentTheme = theme;
 		document.documentElement.setAttribute('data-theme', theme);
 		localStorage.setItem('theme', theme);
+		isOpen = false;
+	}
+
+	function handleClickOutside(event: MouseEvent) {
+		const target = event.target as HTMLElement;
+		if (!target.closest('.theme-dropdown')) {
+			isOpen = false;
+		}
 	}
 </script>
 
-<label class="swap swap-rotate btn btn-ghost btn-circle">
-	<input type="checkbox" checked={isDark} onchange={toggleTheme} />
+<svelte:window on:click={handleClickOutside} />
 
-	<!-- Sun icon -->
-	<svg class="swap-off h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-		<path
-			d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z"
-		/>
-	</svg>
+<div class="theme-dropdown dropdown dropdown-end">
+	<button
+		class="btn btn-ghost btn-sm gap-2"
+		onclick={(e) => {
+			e.stopPropagation();
+			isOpen = !isOpen;
+		}}
+	>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			class="h-5 w-5"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke="currentColor"
+			stroke-width="1.5"
+		>
+			<path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z"
+			/>
+		</svg>
+		<span class="hidden sm:inline capitalize">{currentTheme}</span>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			class="h-4 w-4"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke="currentColor"
+			stroke-width="2"
+		>
+			<path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+		</svg>
+	</button>
 
-	<!-- Moon icon -->
-	<svg class="swap-on h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-		<path
-			d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z"
-		/>
-	</svg>
-</label>
+	{#if isOpen}
+		<div
+			class="dropdown-content z-50 mt-2 p-2 shadow-lg bg-base-200 rounded-box w-56 max-h-80 overflow-y-auto"
+		>
+			<div class="grid grid-cols-1 gap-1">
+				{#each themes as theme}
+					<button
+						class="btn btn-sm justify-start gap-2 {currentTheme === theme
+							? 'btn-primary'
+							: 'btn-ghost'}"
+						onclick={() => selectTheme(theme)}
+					>
+						<div
+							class="bg-base-100 grid shrink-0 grid-cols-2 gap-0.5 rounded-md p-1 shadow-sm"
+							data-theme={theme}
+						>
+							<div class="size-1 rounded-full bg-primary"></div>
+							<div class="size-1 rounded-full bg-secondary"></div>
+							<div class="size-1 rounded-full bg-accent"></div>
+							<div class="size-1 rounded-full bg-neutral"></div>
+						</div>
+						<span class="capitalize flex-1 text-left">{theme}</span>
+						{#if currentTheme === theme}
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-4 w-4"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								stroke-width="2"
+							>
+								<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+							</svg>
+						{/if}
+					</button>
+				{/each}
+			</div>
+		</div>
+	{/if}
+</div>
