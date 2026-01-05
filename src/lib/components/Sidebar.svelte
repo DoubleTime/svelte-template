@@ -78,23 +78,27 @@
 		}
 	}
 
+	function closeFlyoutOnClickOutside(e: MouseEvent) {
+		// Check if click was inside a flyout or flyout button
+		const target = e.target as HTMLElement;
+		if (target.closest('.flyout-trigger') || target.closest('.flyout-menu')) {
+			return;
+		}
+		openFlyout = null;
+	}
+
 	function closeFlyout() {
 		openFlyout = null;
 	}
 
-	// Auto-expand menus that have active children
-	$effect(() => {
-		menuItems.forEach((item) => {
-			if (item.children && isParentActive(item)) {
-				expandedMenus.add(item.label);
-				expandedMenus = new Set(expandedMenus);
-			}
-		});
-	});
+	// Check if a submenu should be open (for expanded drawer mode)
+	function shouldBeOpen(item: MenuItem): boolean {
+		return expandedMenus.has(item.label) || isParentActive(item);
+	}
 </script>
 
 <!-- Click outside to close flyout -->
-<svelte:window onclick={closeFlyout} />
+<svelte:window onmousedown={closeFlyoutOnClickOutside} />
 
 <!-- Sidebar container with responsive width -->
 <div
@@ -130,7 +134,7 @@
 			<li>
 				{#if item.children}
 					<!-- Expanded view (drawer open) - use details/summary -->
-					<details class="is-drawer-close:hidden" open={expandedMenus.has(item.label)}>
+					<details class="is-drawer-close:hidden" open={shouldBeOpen(item)}>
 						<summary
 							class={isParentActive(item) ? 'text-primary font-medium' : ''}
 							onclick={(e) => toggleSubmenu(item.label, e)}
@@ -162,7 +166,9 @@
 
 					<!-- Collapsed view (drawer closed) - clickable button with flyout -->
 					<button
-						class="hidden is-drawer-close:flex w-full justify-center relative {isParentActive(item)
+						class="flyout-trigger hidden is-drawer-close:flex w-full justify-center relative {isParentActive(
+							item
+						)
 							? 'text-primary'
 							: ''}"
 						onclick={(e) => toggleFlyout(item.label, e)}
@@ -183,7 +189,7 @@
 						<!-- Flyout menu -->
 						{#if openFlyout === item.label}
 							<ul
-								class="menu bg-base-100 rounded-box w-52 p-2 shadow-lg absolute left-full top-0 ml-2 z-50"
+								class="flyout-menu menu bg-base-100 rounded-box w-52 p-2 shadow-lg absolute left-full top-0 ml-2 z-50"
 								onclick={(e) => e.stopPropagation()}
 							>
 								<li class="menu-title">{item.label}</li>
