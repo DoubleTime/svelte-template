@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { SvelteSet } from 'svelte/reactivity';
 
 	// Track which submenus are expanded (for drawer open state)
-	let expandedMenus = $state<Set<string>>(new Set());
+	let expandedMenus = $state<SvelteSet<string>>(new SvelteSet());
 	// Track which flyout menu is open (for drawer closed state)
 	let openFlyout = $state<string | null>(null);
 
@@ -66,7 +67,7 @@
 		} else {
 			expandedMenus.add(label);
 		}
-		expandedMenus = new Set(expandedMenus);
+		expandedMenus = new SvelteSet(expandedMenus);
 	}
 
 	function toggleFlyout(label: string, e: Event) {
@@ -122,15 +123,13 @@
 				/>
 				<circle cx="12" cy="12" r="3" />
 			</svg>
-			<span class="is-drawer-close:hidden text-lg font-bold gradient-text whitespace-nowrap"
-				>Admin Panel</span
-			>
+			<span class="is-drawer-close:hidden text-lg font-bold">Admin Panel</span>
 		</a>
 	</div>
 
 	<!-- Navigation Menu -->
 	<ul class="menu w-full grow is-drawer-close:px-1">
-		{#each menuItems as item}
+		{#each menuItems as item (item.label)}
 			<li>
 				{#if item.children}
 					<!-- Expanded view (drawer open) - use details/summary -->
@@ -154,7 +153,7 @@
 							{item.label}
 						</summary>
 						<ul>
-							{#each item.children as child}
+							{#each item.children as child (child.href)}
 								<li>
 									<a href={child.href} class={isActive(child.href) ? 'menu-active' : ''}>
 										{child.label}
@@ -188,12 +187,15 @@
 						</svg>
 						<!-- Flyout menu -->
 						{#if openFlyout === item.label}
+							<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 							<ul
 								class="flyout-menu menu bg-base-100 rounded-box w-52 p-2 shadow-lg absolute left-full top-0 ml-2 z-50"
+								role="menu"
 								onclick={(e) => e.stopPropagation()}
+								onkeydown={(e) => e.key === 'Escape' && (openFlyout = null)}
 							>
 								<li class="menu-title">{item.label}</li>
-								{#each item.children as child}
+								{#each item.children as child (child.href)}
 									<li>
 										<a
 											href={child.href}

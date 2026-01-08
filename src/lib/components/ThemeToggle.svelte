@@ -64,7 +64,7 @@
 	}
 </script>
 
-<svelte:window on:click={handleClickOutside} />
+<svelte:window onclick={handleClickOutside} />
 
 <div class="theme-dropdown dropdown dropdown-end">
 	<button
@@ -106,7 +106,7 @@
 			class="dropdown-content z-50 mt-2 p-2 shadow-lg bg-base-200 rounded-box w-56 max-h-80 overflow-y-auto"
 		>
 			<div class="grid grid-cols-1 gap-1">
-				{#each themes as theme}
+				{#each themes as theme (theme)}
 					<button
 						class="btn btn-sm justify-start gap-2 {currentTheme === theme
 							? 'btn-primary'

@@ -155,7 +155,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					{#each filteredUsers as user}
+					{#each filteredUsers as user (user.id)}
 						<tr class="hover">
 							<th>
 								<label>
@@ -221,12 +221,10 @@
 
 <!-- Delete Confirmation Modal -->
 <Modal id="delete-modal" title="Confirm Delete" bind:open={deleteModalOpen}>
-	{#snippet children()}
-		<p>
-			Are you sure you want to delete <strong>{selectedUser?.name}</strong>? This action cannot be
-			undone.
-		</p>
-	{/snippet}
+	<p>
+		Are you sure you want to delete <strong>{selectedUser?.name}</strong>? This action cannot be
+		undone.
+	</p>
 	{#snippet actions()}
 		<button class="btn" onclick={() => (deleteModalOpen = false)}>Cancel</button>
 		<button class="btn btn-error" onclick={confirmDelete}>Delete</button>

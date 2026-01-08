@@ -142,7 +142,7 @@
 						</button>
 					</label>
 					<div class="text-right mt-2">
-						<a href="#" class="text-sm link link-primary">Forgot Password?</a>
+						<a href="/forgot-password" class="text-sm link link-primary">Forgot Password?</a>
 					</div>
 				</div>
 
@@ -159,7 +159,7 @@
 			<div class="text-center text-sm">
 				<p class="text-base-content/70">
 					Don't have an account?
-					<a href="#" class="link link-primary">Sign up</a>
+					<a href="/register" class="link link-primary">Sign up</a>
 				</p>
 			</div>
 

@@ -62,7 +62,7 @@
 
 	<!-- Stats Grid -->
 	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-		{#each stats as stat}
+		{#each stats as stat (stat.label)}
 			<div class="stat bg-base-100 rounded-box shadow-sm">
 				<div class="stat-figure text-primary">
 					<svg
@@ -119,7 +119,7 @@
 				<div class="overflow-x-auto">
 					<table class="table table-sm">
 						<tbody>
-							{#each recentActivity as activity}
+							{#each recentActivity as activity (activity.action + activity.user)}
 								<tr>
 									<td>
 										<div class="flex items-center gap-3">

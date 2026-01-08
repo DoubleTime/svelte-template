@@ -105,7 +105,7 @@
 		</div>
 
 		<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-			{#each features as feature}
+			{#each features as feature (feature.title)}
 				<div class="card bg-base-100 shadow-md hover-lift">
 					<div class="card-body">
 						<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">

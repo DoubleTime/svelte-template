@@ -158,9 +158,9 @@
 					<option value="dark">Dark</option>
 					<option value="system">System</option>
 				</select>
-				<label class="label">
+				<div class="label">
 					<span class="label-text-alt text-base-content/60">Choose your preferred color theme</span>
-				</label>
+				</div>
 			</div>
 		</div>
 	</div>
