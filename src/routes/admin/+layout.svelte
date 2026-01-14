@@ -3,8 +3,33 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import ThemeToggle from '$lib/components/ThemeToggle.svelte';
+	import { browser } from '$app/environment';
 
 	let { children, data } = $props();
+
+	const STORAGE_KEY_SIDEBAR_OPEN = 'admin_sidebar_open';
+
+	// Initialize sidebar state from localStorage (default: open)
+	let sidebarOpen = $state(true);
+
+	// On mount, read from localStorage
+	$effect(() => {
+		if (browser) {
+			const saved = localStorage.getItem(STORAGE_KEY_SIDEBAR_OPEN);
+			if (saved !== null) {
+				sidebarOpen = saved === 'true';
+			}
+		}
+	});
+
+	// Persist sidebar state when it changes
+	function handleSidebarToggle(e: Event) {
+		const target = e.target as HTMLInputElement;
+		sidebarOpen = target.checked;
+		if (browser) {
+			localStorage.setItem(STORAGE_KEY_SIDEBAR_OPEN, String(sidebarOpen));
+		}
+	}
 </script>
 
 <svelte:head>
@@ -14,7 +39,13 @@
 
 <!-- Responsive drawer with collapsible sidebar -->
 <div class="drawer lg:drawer-open">
-	<input id="admin-drawer" type="checkbox" class="drawer-toggle" />
+	<input
+		id="admin-drawer"
+		type="checkbox"
+		class="drawer-toggle"
+		checked={sidebarOpen}
+		onchange={handleSidebarToggle}
+	/>
 
 	<div class="drawer-content flex flex-col min-h-screen">
 		<!-- Navbar with drawer toggle -->
@@ -40,7 +71,7 @@
 
 			<!-- Mobile title -->
 			<div class="flex-1 px-2 lg:hidden">
-				<span class="text-xl font-bold gradient-text">Admin</span>
+				<span class="text-xl font-bold">Admin</span>
 			</div>
 
 			<!-- Breadcrumb - desktop only -->

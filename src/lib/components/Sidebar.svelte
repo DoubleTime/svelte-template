@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { SvelteSet } from 'svelte/reactivity';
+	import { browser } from '$app/environment';
 
-	// Track which submenus are expanded (for drawer open state)
-	let expandedMenus = $state<SvelteSet<string>>(new SvelteSet());
-	// Track which flyout menu is open (for drawer closed state)
-	let openFlyout = $state<string | null>(null);
+	const STORAGE_KEY_EXPANDED_MENUS = 'admin_sidebar_expanded_menus';
 
 	type MenuItem = {
 		href?: string;
@@ -44,6 +42,40 @@
 			icon: 'M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z'
 		}
 	];
+
+	// Get all menu labels that have children (submenus)
+	function getAllSubmenuLabels(): string[] {
+		return menuItems.filter((item) => item.children).map((item) => item.label);
+	}
+
+	// Initialize expanded menus from localStorage or default to all expanded
+	function initExpandedMenus(): SvelteSet<string> {
+		if (browser) {
+			const saved = localStorage.getItem(STORAGE_KEY_EXPANDED_MENUS);
+			if (saved) {
+				try {
+					const parsed = JSON.parse(saved);
+					return new SvelteSet(parsed);
+				} catch {
+					// Invalid JSON, use default
+				}
+			}
+		}
+		// Default: all submenus expanded
+		return new SvelteSet(getAllSubmenuLabels());
+	}
+
+	// Track which submenus are expanded (for drawer open state)
+	let expandedMenus = $state<SvelteSet<string>>(initExpandedMenus());
+	// Track which flyout menu is open (for drawer closed state)
+	let openFlyout = $state<string | null>(null);
+
+	// Persist expanded menus to localStorage whenever it changes
+	$effect(() => {
+		if (browser) {
+			localStorage.setItem(STORAGE_KEY_EXPANDED_MENUS, JSON.stringify([...expandedMenus]));
+		}
+	});
 
 	function isActive(href: string | undefined): boolean {
 		if (!href) return false;
@@ -168,7 +200,7 @@
 						class="flyout-trigger hidden is-drawer-close:flex w-full justify-center relative {isParentActive(
 							item
 						)
-							? 'text-primary'
+							? 'menu-active'
 							: ''}"
 						onclick={(e) => toggleFlyout(item.label, e)}
 						title={item.label}
@@ -280,3 +312,16 @@
 		</li>
 	</ul>
 </div>
+
+<style>
+	/* Prevent flyout menu items from inheriting greyed out text from parent's menu-active */
+	.flyout-trigger.menu-active .flyout-menu :where(li > a) {
+		color: var(--color-base-content);
+	}
+
+	/* Keep active submenu item styled properly */
+	.flyout-trigger.menu-active .flyout-menu :where(li > a.menu-active) {
+		color: var(--color-neutral-content);
+		background-color: var(--color-neutral);
+	}
+</style>

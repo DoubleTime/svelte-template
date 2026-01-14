@@ -54,7 +54,7 @@
 			<div class="badge badge-primary badge-outline mb-4 animate-pulse">✨ Production Ready</div>
 			<h1 class="text-5xl md:text-6xl font-bold leading-tight">
 				Build Amazing Apps
-				<span class="gradient-text block">Faster Than Ever</span>
+				<span class="skeleton skeleton-text block">Faster Than Ever</span>
 			</h1>
 			<p class="py-6 text-lg text-base-content/70 max-w-xl mx-auto">
 				A complete SvelteKit boilerplate with authentication, admin dashboard, and beautiful DaisyUI
