@@ -87,8 +87,12 @@
 			<div class="flex-none gap-2">
 				<ThemeToggle />
 				<div class="dropdown dropdown-end">
-					<div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar placeholder">
-						<div class="bg-primary text-primary-content w-10 rounded-full">
+					<div
+						tabindex="0"
+						role="button"
+						class="btn btn-ghost btn-circle avatar avatar-placeholder"
+					>
+						<div class="bg-neutral text-neutral-content w-10 rounded-full">
 							<span class="text-sm">{data.user?.username?.charAt(0).toUpperCase() || 'A'}</span>
 						</div>
 					</div>

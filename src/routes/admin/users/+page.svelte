@@ -164,8 +164,8 @@
 							</th>
 							<td>
 								<div class="flex items-center gap-3">
-									<div class="avatar placeholder">
-										<div class="bg-primary/10 text-primary w-10 rounded-full">
+									<div class="avatar avatar-placeholder">
+										<div class="bg-neutral text-neutral-content w-12 rounded-full">
 											<span>{user.name.charAt(0)}</span>
 										</div>
 									</div>

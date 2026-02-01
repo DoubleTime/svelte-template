@@ -123,8 +123,8 @@
 								<tr>
 									<td>
 										<div class="flex items-center gap-3">
-											<div class="avatar placeholder">
-												<div class="bg-primary/10 text-primary w-10 rounded-full">
+											<div class="avatar avatar-placeholder">
+												<div class="bg-neutral text-neutral-content w-10 rounded-full">
 													{#if activity.type === 'user'}
 														<svg
 															xmlns="http://www.w3.org/2000/svg"

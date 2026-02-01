@@ -46,8 +46,8 @@
 
 			<div class="flex flex-col md:flex-row gap-6">
 				<div class="flex-shrink-0">
-					<div class="avatar placeholder">
-						<div class="bg-primary text-primary-content w-24 rounded-full">
+					<div class="avatar avatar-placeholder">
+						<div class="bg-neutral text-neutral-content w-24 rounded-full">
 							<span class="text-3xl">{profileForm.username.charAt(0).toUpperCase()}</span>
 						</div>
 					</div>
